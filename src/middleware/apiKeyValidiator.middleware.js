@@ -6,7 +6,7 @@ dotenv.config();
 
 export const userApiKeyValidator = async (req, res, next) => {
   try {
-    const providedKey = req.header("x-api-key") || req.query.apiKey || process.env.API_KEY_SECRET;
+    const providedKey = req.header("x-api-key") || req.query.apiKey;
 
     if (!providedKey) {
       return res.status(401).json({
@@ -32,6 +32,7 @@ export const userApiKeyValidator = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: "Server error during API key validation",
+      error:err.message,
     });
   }
 };
