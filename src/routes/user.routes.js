@@ -12,12 +12,12 @@ import { userApiKeyValidator } from "../middleware/apiKeyValidiator.middleware.j
 
 const router = express.Router();
 
-router.get("/users", userApiKeyValidator,fetchAllUsers);
+router.get("/users", fetchAllUsers);
 router.post("/users", createUser);
-router.put("/users/:id",userApiKeyValidator, updateUser);
-router.delete("/users/:id",userApiKeyValidator, deleteUser);
-router.post("/users/:id/link", userApiKeyValidator,createRelationShip);
-router.delete("/users/:id/unlink",userApiKeyValidator, removeRelationShip);
-router.get("/graph", userApiKeyValidator,getGraphData);
+router.put("/users/:id", updateUser);
+router.delete("/users/:id", deleteUser);
+router.post("/users/:id/link", createRelationShip);
+router.delete("/users/:id/unlink", removeRelationShip);
+router.get("/graph",getGraphData);
 
 export default router;
