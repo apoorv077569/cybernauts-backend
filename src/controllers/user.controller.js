@@ -33,7 +33,7 @@ export const createUser = async (req, res) => {
       success: true,
       message: "User created successfully",
       newUser,
-      apiKey:newUser.apiKey,
+      apiKey: newUser.apiKey,
     });
   } catch (err) {
     return res.status(500).json({
@@ -71,7 +71,7 @@ export const deleteUser = async (req, res) => {
 
 export const createRelationShip = async (req, res) => {
   try {
-    const  userId  = req.params.id;
+    const userId = req.params.id;
     const { friendId } = req.body;
     if (!friendId) {
       return res
@@ -150,11 +150,9 @@ export const removeRelationShip = async (req, res) => {
     await userA.save();
     await userB.save();
 
-    res
-      .status(200)
-      .json({
-        message: `Successfully unlinked ${userA.username} and ${userB.username}.`,
-      });
+    res.status(200).json({
+      message: `Successfully unlinked ${userA.username} and ${userB.username}.`,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -176,21 +174,21 @@ export const getGraphData = async (req, res) => {
         popularityScore: user.popularityScore,
         age: user.age,
       },
-      position: { x: 0, y: 0 },
-      // The frontend will use this 'type' to render the correct custom node
+      position: {
+        x: Math.floor(Math.random() * 800) - 400, 
+        y: Math.floor(Math.random() * 800) - 400,
+      },
       type: user.popularityScore > 5 ? "highScore" : "lowScore",
     }));
 
     const edges = [];
     const existingEdges = new Set();
 
-    // Create edges by iterating through friend lists
     for (const user of users) {
       for (const friendId of user.friends) {
         const sourceId = user.id.toString();
         const targetId = friendId.toString();
 
-        // Prevent duplicates (e.g., don't create both A->B and B->A edge objects)
         const edgeKeyA = `${sourceId}-${targetId}`;
         const edgeKeyB = `${targetId}-${sourceId}`;
 
@@ -236,14 +234,13 @@ export const updateUser = async (req, res) => {
       updateData.hobbies = processHobbyInput(hobbies);
     }
 
-    // Find user, update basic fields
+    
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Recalculate score if hobbies changed (which affects shared hobby count)
     if (hobbies) {
       await calculatePopularityScore(user);
       await user.save();
@@ -257,5 +254,3 @@ export const updateUser = async (req, res) => {
     });
   }
 };
-
-

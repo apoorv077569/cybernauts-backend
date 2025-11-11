@@ -1,4 +1,3 @@
-// src/middleware/userApiKeyValidator.js
 import { User } from "../models/user.model.js";
 import dotenv from "dotenv";
 
@@ -15,7 +14,6 @@ export const userApiKeyValidator = async (req, res, next) => {
       });
     }
 
-    // Look up user with this key
     const user = await User.findOne({ apiKey: providedKey });
 
     if (!user) {
@@ -25,7 +23,6 @@ export const userApiKeyValidator = async (req, res, next) => {
       });
     }
 
-    // Attach user data to request
     req.user = user;
     next();
   } catch (err) {
